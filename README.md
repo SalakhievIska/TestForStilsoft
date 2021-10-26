@@ -48,4 +48,6 @@ python manage.py runserver
 
 #### Веб-приложение готово и запущено!
 
-![Study](fronted/src/assets/logo.png)
+<p align="center">
+  <img src="https://github.com/SalakhievIska/TestForStilsoft/blob/dev/fronted/src/assets/logo.png" alt="Study"/>
+</p>
