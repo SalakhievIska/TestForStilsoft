@@ -1,4 +1,4 @@
-# ![Study](fronted/src/assets/logo.png) TestForStilsoft
+# TestForStilsoft
 
 ## Технологии
 
@@ -47,3 +47,5 @@ python manage.py runserver
 ```
 
 #### Веб-приложение готово и запущено!
+
+![Study](fronted/src/assets/logo.png)
