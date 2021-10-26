@@ -1,4 +1,7 @@
-# TestForStilsoft
+<p align="center">
+  <img src="https://github.com/SalakhievIska/TestForStilsoft/blob/dev/fronted/src/assets/logo.png" alt="Study" width="100" />
+  <h1>TestForStilsoft</h1>
+</p>
 
 ## Технологии
 
@@ -47,7 +50,3 @@ python manage.py runserver
 ```
 
 #### Веб-приложение готово и запущено!
-
-<p align="center">
-  <img src="https://github.com/SalakhievIska/TestForStilsoft/blob/dev/fronted/src/assets/logo.png" alt="Study"/>
-</p>
