@@ -1,0 +1,12 @@
+# Django
+django
+django-filter
+django-cors-headers
+
+# DRF
+djangorestframework
+djangorestframework-camel-case
+drf-flex-fields
+
+# Other
+python-dateutil

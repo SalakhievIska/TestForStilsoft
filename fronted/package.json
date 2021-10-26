@@ -1,0 +1,56 @@
+{
+  "name": "study",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "serve:open": "vue-cli-service serve --open",
+    "build": "vue-cli-service build",
+    "lint": "npx eslint --config .eslintrc.json \"src/**/\"",
+    "lint:fix": "npx eslint --fix --config .eslintrc.json \"src/**/\""
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "axios": "^0.23.0",
+    "core-js": "^3.6.5",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "vue": "^2.6.11",
+    "vue-meta": "^2.4.0",
+    "vuetify": "^2.4.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-vue": "^7.20.0",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.4.3",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
