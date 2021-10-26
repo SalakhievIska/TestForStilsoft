@@ -1,16 +1,21 @@
 const requiredField = (v) => !!v || 'Обязательное поле';
 
-const maxLengthField = (v, _max, label) => (v && v.length <= _max) || `${label} не длинее ${_max} символов`;
-
-const urlField = (v) => {
-  if (v) {
-    try {
-      const url = new URL(v);
-      return !!url;
-    } catch (_error) {
-      return 'Ссылка не валидна';
-    }
-  } return true;
+const checkValueMaxLength = (value, _max) => {
+  if (value) return value.length < _max;
+  return true;
 };
+
+const maxLengthField = (v, _max, label) => checkValueMaxLength(v, _max) || `${label} не длинее ${_max} символов`;
+
+const checkUrl = (url) => {
+  try {
+    new URL(url); // eslint-disable-line no-new
+    return true;
+  } catch (_error) {
+    return false;
+  }
+};
+
+const urlField = (v) => checkUrl(v) || 'Ссылка не валидна';
 
 export { requiredField, maxLengthField, urlField };

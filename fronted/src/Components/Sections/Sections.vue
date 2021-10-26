@@ -17,49 +17,85 @@
     <v-divider>
     </v-divider>
 
-    <v-data-table
-        :headers="headers"
-        :items="tableData"
-        class="px-10 my-5"
-        locale="ru-ru">
+    <v-row>
+      <v-col cols="2" class="elevation-1">
+        <v-form
+            ref="filterForm"
+            class="px-4 my-5">
+          <v-text-field
+              v-model="filterForm.name"
+              label="Название">
+          </v-text-field>
 
-      <template v-slot:item.actions="{ item }">
-        <v-icon
-            small
-            class="mr-2"
-            @click="addStudent(item.id)">
-          fas fa-user-plus
-        </v-icon>
-        <v-icon
-            small
-            class="mr-2"
-            @click="editSection(item.id)">
-          fas fa-edit
-        </v-icon>
-        <v-icon
-            small
-            @click="deleteSection(item.id)">
-          fas fa-trash-alt
-        </v-icon>
-      </template>
+          <v-btn color="grey lighten-2" @click="resetFilterForm">
+            <v-icon small class="mx-1">
+              fas fa-times
+            </v-icon>
+            Сбросить
+          </v-btn>
 
-      <template v-slot:item.students="{ item }">
-        <span v-for="student in item.students" :key="student.key">
-          {{ student.text }}
-          <v-icon
-              small
-              class="ml-2"
-              @click="deleteStudentInSection(student.key)">
-            fas fa-trash-alt
-          </v-icon>
-          <br>
-        </span>
-      </template>
+          <v-btn color="purple lighten-2 ml-2" dark @click="filter">
+            <v-icon small class="mx-1">
+              fas fa-filter
+            </v-icon>
+            Фильтр
+          </v-btn>
+        </v-form>
+      </v-col>
 
-      <template v-slot:no-data>
-        Список секицй пуст!
-      </template>
-    </v-data-table>
+      <v-col cols="10">
+        <v-data-table
+            :headers="headers"
+            :items="tableData"
+            class="px-10 my-5"
+            locale="ru-ru"
+            :footer-props="{
+              showFirstLastPage: true,
+              itemsPerPageOptions: [1, 5, 10, 20, -1],
+              itemsPerPageText: 'Записей на странице:',
+              itemsPerPageAllText: 'Все',
+              pageText: '{0}-{1} из {2}',
+            }">
+
+          <template v-slot:item.actions="{ item }">
+            <v-icon
+                small
+                class="mr-2"
+                @click="addStudent(item.id)">
+              fas fa-user-plus
+            </v-icon>
+            <v-icon
+                small
+                class="mr-2"
+                @click="editSection(item.id)">
+              fas fa-edit
+            </v-icon>
+            <v-icon
+                small
+                @click="deleteSection(item.id)">
+              fas fa-trash-alt
+            </v-icon>
+          </template>
+
+          <template v-slot:item.students="{ item }">
+            <span v-for="student in item.students" :key="student.key">
+              {{ student.text }}
+              <v-icon
+                  small
+                  class="ml-2"
+                  @click="deleteStudentInSection(student.key)">
+                fas fa-trash-alt
+              </v-icon>
+              <br>
+            </span>
+          </template>
+
+          <template v-slot:no-data>
+            Список секицй пуст!
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
 
     <v-dialog
         v-model="sectionAddEditDialog"
@@ -113,6 +149,8 @@ export default {
       { text: 'Действия', value: 'actions', align: 'end' },
     ],
     tableData: [],
+    filterForm: {},
+
     sectionAddEditDialog: false,
     sectionDeleteDialog: false,
     studentInSectionAddDialog: false,
@@ -123,6 +161,10 @@ export default {
     sectionIdForStudentInSectionAdd: 0,
     studentInSectionIdForDelete: 0,
   }),
+
+  computed: {
+    emptyFilterForm: () => ({ name: '' }),
+  },
 
   methods: {
     addSection() {
@@ -165,7 +207,7 @@ export default {
 
     getSections() {
       api.get('sections/', {
-        params: { expand: 'students,students.student' },
+        params: { expand: 'students,students.student', ...this.filterForm },
       }).then((response) => {
         this.tableData = _.map(response.data, (item) => this.formatSection(item));
       });
@@ -182,9 +224,19 @@ export default {
       this.sectionIdForStudentInSectionAdd = 0;
       this.studentInSectionIdForDelete = 0;
     },
+
+    filter() {
+      this.getSections();
+    },
+
+    resetFilterForm() {
+      this.$refs.filterForm.reset();
+      this.getSections();
+    },
   },
 
   created() {
+    this.filterForm = this.emptyFilterForm;
     this.getSections();
 
     bus.$on('section-add', (newSection) => {

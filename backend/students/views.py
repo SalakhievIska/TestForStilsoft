@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from .serializers import StudentSerializer
 from .models import Student
+from .filters import StudentFilter
 
 
 class StudentViewSet(ModelViewSet):
@@ -10,3 +11,4 @@ class StudentViewSet(ModelViewSet):
 
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    filterset_class = StudentFilter

@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from .serializers import SectionSerializer, StudentInSectionSerializer
 from .models import Section, StudentInSection
+from .filters import SectionFilter
 
 
 class SectionViewSet(ModelViewSet):
@@ -10,6 +11,7 @@ class SectionViewSet(ModelViewSet):
 
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
+    filterset_class = SectionFilter
 
 
 class StudentInSectionViewSet(ModelViewSet):

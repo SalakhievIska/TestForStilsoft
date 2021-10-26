@@ -38,9 +38,7 @@ import Sections from './Sections/Sections';
 export default {
   name: 'Index',
 
-  components: {
-    Sections, Students,
-  },
+  components: { Sections, Students },
 
   data: () => ({
     tab: null,

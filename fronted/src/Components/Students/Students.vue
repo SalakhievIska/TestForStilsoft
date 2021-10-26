@@ -17,76 +17,127 @@
     <v-divider>
     </v-divider>
 
-    <v-data-table
-        :headers="headers"
-        :items="tableData"
-        class="px-10 my-5"
-        locale="ru-RU">
+    <v-row>
+      <v-col cols="2" class="elevation-1">
+        <v-form
+            ref="filterForm"
+            class="px-4 my-5">
+          <v-text-field
+              v-model="filterForm.firstName"
+              label="Имя">
+          </v-text-field>
+          <v-text-field
+              v-model="filterForm.lastName"
+              label="Фамилия">
+          </v-text-field>
 
-      <template v-slot:item.profilePhotoUrl="{ item }">
-        <v-avatar>
-          <img v-if="item.profilePhotoUrl" :src="item.profilePhotoUrl">
-          <v-icon v-else small>
-            fas fa-user
-          </v-icon>
-        </v-avatar>
-      </template>
+          <v-radio-group
+              v-model="filterForm.sex"
+              row>
+            <v-radio
+                v-for="item in sex"
+                :key="item.type"
+                :label="item.text"
+                :value="item.type">
+            </v-radio>
+          </v-radio-group>
 
-      <template v-slot:item.isReadyToJoinToSection="{ item }">
-        <v-icon
-            color="green"
-            small
-            v-if="item.isReadyToJoinToSection">
-          fas fa-check
-        </v-icon>
-        <v-icon
-            color="red"
-            small
-            v-else>
-          fas fa-times
-        </v-icon>
-      </template>
+          <v-btn color="grey lighten-2" @click="resetFilterForm">
+            <v-icon small class="mx-1">
+              fas fa-times
+            </v-icon>
+            Сбросить
+          </v-btn>
 
-      <template v-slot:item.isCitizenOfRf="{ item }">
-        <v-icon
-            color="green"
-            small
-            v-if="item.isCitizenOfRf">
-          fas fa-check
-        </v-icon>
-        <v-icon
-            color="red"
-            small
-            v-else>
-          fas fa-times
-        </v-icon>
-      </template>
+          <v-btn color="purple lighten-2 ml-2" dark @click="filter">
+            <v-icon small class="mx-1">
+              fas fa-filter
+            </v-icon>
+            Фильтр
+          </v-btn>
+        </v-form>
+      </v-col>
 
-      <template v-slot:item.actions="{ item }">
-        <v-icon
-            small
-            class="mr-2"
-            @click="editStudent(item.id)">
-          fas fa-edit
-        </v-icon>
-        <v-icon
-            small
-            @click="deleteStudent(item.id)">
-          fas fa-trash-alt
-        </v-icon>
-      </template>
+      <v-col cols="10">
+        <v-data-table
+            :headers="headers"
+            :items="tableData"
+            class="px-10 my-5"
+            locale="ru-ru"
+            :footer-props="{
+              showFirstLastPage: true,
+              itemsPerPageOptions: [1, 5, 10, 20, -1],
+              itemsPerPageText: 'Записей на странице:',
+              itemsPerPageAllText: 'Все',
+              pageText: '{0}-{1} из {2}',
+            }">
 
-      <template v-slot:item.sections="{ item }">
-        <span v-for="section in item.sections" :key="section.id">
-          {{ section.section.name }}
-          <br>
-        </span>
-      </template>
+          <template v-slot:item.profilePhotoUrl="{ item }">
+            <v-avatar>
+              <img v-if="item.profilePhotoUrl" :src="item.profilePhotoUrl">
+              <v-icon v-else small>
+                fas fa-user
+              </v-icon>
+            </v-avatar>
+          </template>
 
-      <template v-slot:no-data>
-        Список студентов пуст!
-      </template>
-    </v-data-table>
+          <template v-slot:item.isReadyToJoinToSection="{ item }">
+            <v-icon
+                color="green"
+                small
+                v-if="item.isReadyToJoinToSection">
+              fas fa-check
+            </v-icon>
+            <v-icon
+                color="red"
+                small
+                v-else>
+              fas fa-times
+            </v-icon>
+          </template>
+
+          <template v-slot:item.isCitizenOfRf="{ item }">
+            <v-icon
+                color="green"
+                small
+                v-if="item.isCitizenOfRf">
+              fas fa-check
+            </v-icon>
+            <v-icon
+                color="red"
+                small
+                v-else>
+              fas fa-times
+            </v-icon>
+          </template>
+
+          <template v-slot:item.actions="{ item }">
+            <v-icon
+                small
+                class="mr-2"
+                @click="editStudent(item.id)">
+              fas fa-edit
+            </v-icon>
+            <v-icon
+                small
+                @click="deleteStudent(item.id)">
+              fas fa-trash-alt
+            </v-icon>
+          </template>
+
+          <template v-slot:item.sections="{ item }">
+            <span v-for="section in item.sections" :key="section.id">
+              {{ section.section.name }}
+              <br>
+            </span>
+          </template>
+
+          <template v-slot:no-data>
+            Список студентов пуст!
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
 
     <v-dialog
         v-model="studentAddEditDialog"
@@ -132,6 +183,8 @@ export default {
       { text: 'Действия', value: 'actions', align: 'end' },
     ],
     tableData: [],
+    filterForm: {},
+    sex,
 
     studentAddEditDialog: false,
     studentDeleteDialog: false,
@@ -139,6 +192,14 @@ export default {
     studentIdForEdit: 0,
     studentIdForDelete: 0,
   }),
+
+  computed: {
+    emptyFilterForm: () => ({
+      firstName: '',
+      lastName: '',
+      sex: '',
+    }),
+  },
 
   methods: {
     addStudent() {
@@ -172,10 +233,10 @@ export default {
 
     getStudents() {
       api.get('students/', {
-        params: { expand: 'sections,sections.section' },
+        params: { expand: 'sections,sections.section', ...this.filterForm },
       }).then((response) => {
         this.tableData = _.map(response.data, (item) => this.formatStudent(item));
-      }).catch((error) => console.log(error));
+      });
     },
 
     afterEditStudents() {
@@ -184,9 +245,19 @@ export default {
       this.studentIdForEdit = 0;
       this.studentIdForDelete = 0;
     },
+
+    filter() {
+      this.getStudents();
+    },
+
+    resetFilterForm() {
+      this.$refs.filterForm.reset();
+      this.getStudents();
+    },
   },
 
   created() {
+    this.filterForm = this.emptyFilterForm;
     this.getStudents();
 
     bus.$on('student-add', (newStudent) => {
