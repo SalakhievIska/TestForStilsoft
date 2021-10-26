@@ -1,4 +1,4 @@
-# TestForStilsoft
+# ![Study](fronted/src/assets/logo.png) TestForStilsoft
 
 ## Технологии
 
@@ -8,7 +8,7 @@
 
 - Vue.js
 - Vuetify
-- Axioes
+- Axios
 - lodash
 - Django
 - DRF
