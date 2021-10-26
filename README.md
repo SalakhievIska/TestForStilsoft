@@ -1,7 +1,8 @@
 <p align="center">
   <img src="https://github.com/SalakhievIska/TestForStilsoft/blob/dev/fronted/src/assets/logo.png" alt="Study" width="100" />
-  <h1>TestForStilsoft</h1>
 </p>
+
+<h1 align="center">TestForStilsoft</h1>
 
 ## Технологии
 
