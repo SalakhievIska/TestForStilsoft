@@ -1,4 +1,4 @@
-# ![Study](fronted/src/assets/logo.png) TestForStilsoft
+# ![Study](fronted/src/assets/logo.svg) TestForStilsoft
 
 ## Технологии
 
