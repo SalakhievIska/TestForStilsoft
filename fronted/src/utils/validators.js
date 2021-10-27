@@ -8,12 +8,14 @@ const checkValueMaxLength = (value, _max) => {
 const maxLengthField = (v, _max, label) => checkValueMaxLength(v, _max) || `${label} не длинее ${_max} символов`;
 
 const checkUrl = (url) => {
-  try {
-    new URL(url); // eslint-disable-line no-new
-    return true;
-  } catch (_error) {
-    return false;
-  }
+  if (url) {
+    try {
+      new URL(url); // eslint-disable-line no-new
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  } return true;
 };
 
 const urlField = (v) => checkUrl(v) || 'Ссылка не валидна';
