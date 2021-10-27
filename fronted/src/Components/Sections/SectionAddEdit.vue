@@ -42,7 +42,6 @@
 
 <script>
 import api from '/src/apis/api';
-import bus from '/src/utils/bus';
 import { requiredField, maxLengthField } from '/src/utils/validators';
 
 export default {
@@ -68,7 +67,7 @@ export default {
   },
 
   methods: {
-    closeDialog: () => bus.$emit('close-dialog'),
+    closeDialog: () => this.$emit('close-dialog'),
 
     saveSection() {
       if (this.$refs.form.validate()) {
@@ -76,10 +75,10 @@ export default {
         const params = { params: { expand: 'students,students.student' } };
         if (this.sectionId === 0) {
           api.post('sections/', section, params)
-            .then((response) => bus.$emit('section-add', response.data));
+            .then((response) => this.$emit('section-add', response.data));
         } else {
           api.patch(`sections/${this.sectionId}/`, section, params)
-            .then((response) => bus.$emit('section-edit', response.data));
+            .then((response) => this.$emit('section-edit', response.data));
         }
       }
     },

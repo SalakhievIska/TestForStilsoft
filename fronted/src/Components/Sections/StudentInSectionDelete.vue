@@ -24,7 +24,6 @@
 
 <script>
 import api from '/src/apis/api';
-import bus from '/src/utils/bus';
 
 export default {
   name: 'StudentInSectionDelete',
@@ -36,7 +35,7 @@ export default {
   }),
 
   methods: {
-    closeDialog: () => bus.$emit('close-dialog'),
+    closeDialog: () => this.$emit('close-dialog'),
 
     submitDelete() {
       api.get(`students-in-sections/${this.studentInSectionId}/`).then((response) => {
@@ -45,7 +44,7 @@ export default {
           .then(() => {
             api.get(`sections/${this.sectionId}/`, {
               params: { expand: 'students,students.student' },
-            }).then((rResponse) => bus.$emit('section-edit', rResponse.data));
+            }).then((rResponse) => this.$emit('section-edit', rResponse.data));
           });
       });
     },

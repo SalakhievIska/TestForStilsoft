@@ -24,7 +24,6 @@
 
 <script>
 import api from '/src/apis/api';
-import bus from '/src/utils/bus';
 
 export default {
   name: 'StudentDelete',
@@ -34,10 +33,10 @@ export default {
   methods: {
     submitDelete() {
       api.delete(`students/${this.studentId}/`)
-        .then(() => bus.$emit('student-delete', this.studentId));
+        .then(() => this.$emit('student-delete', this.studentId));
     },
 
-    closeDialog: () => bus.$emit('close-dialog'),
+    closeDialog: () => this.$emit('close-dialog'),
   },
 };
 </script>

@@ -142,13 +142,20 @@
     <v-dialog
         v-model="studentAddEditDialog"
         max-width="600">
-      <StudentAddEdit :student-id="studentIdForEdit"/>
+      <StudentAddEdit
+          :student-id="studentIdForEdit"
+          v-on:student-add="studentAdd($event)"
+          v-on:student-edit="studentEdit($event)"
+          v-on:close-dialog="closeDialog"/>
     </v-dialog>
 
     <v-dialog
         v-model="studentDeleteDialog"
         max-width="400">
-      <StudentDelete :student-id="studentIdForDelete"/>
+      <StudentDelete
+          :student-id="studentIdForDelete"
+          v-on:student-delete="studentDelete($event)"
+          v-on:close-dialog="closeDialog"/>
     </v-dialog>
   </div>
 </template>
@@ -156,7 +163,6 @@
 <script>
 import api from '/src/apis/api';
 import sex from '/src/apis/enums';
-import bus from '/src/utils/bus';
 import moment from 'moment';
 import _ from 'lodash';
 import StudentAddEdit from '/src/Components/Students/StudentAddEdit';
@@ -254,29 +260,29 @@ export default {
       this.$refs.filterForm.reset();
       this.getStudents();
     },
+
+    studentAdd(student) {
+      this.tableData = _.concat(this.tableData, this.formatStudent(student));
+      this.afterEditStudents();
+    },
+
+    studentEdit(student) {
+      const studentIndex = _.findIndex(this.tableData, (el) => el.id === student.id);
+      this.tableData.splice(studentIndex, 1, this.formatStudent(student));
+      this.afterEditStudents();
+    },
+
+    studentDelete(studentId) {
+      this.tableData = _.remove(this.tableData, (el) => el.id !== studentId);
+      this.afterEditStudents();
+    },
+
+    closeDialog: () => this.afterEditStudents(),
   },
 
   created() {
     this.filterForm = this.emptyFilterForm;
     this.getStudents();
-
-    bus.$on('student-add', (newStudent) => {
-      this.tableData = _.concat(this.tableData, this.formatStudent(newStudent));
-      this.afterEditStudents();
-    });
-
-    bus.$on('student-edit', (student) => {
-      const studentIndex = _.findIndex(this.tableData, (el) => el.id === student.id);
-      this.tableData.splice(studentIndex, 1, this.formatStudent(student));
-      this.afterEditStudents();
-    });
-
-    bus.$on('student-delete', (studentId) => {
-      this.tableData = _.remove(this.tableData, (el) => el.id !== studentId);
-      this.afterEditStudents();
-    });
-
-    bus.$on('close-dialog', () => this.afterEditStudents());
   },
 };
 

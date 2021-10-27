@@ -75,7 +75,6 @@
 
 <script>
 import api from '/src/apis/api';
-import bus from '/src/utils/bus';
 import { requiredField } from '/src/utils/validators';
 import _ from 'lodash';
 import moment from 'moment';
@@ -108,7 +107,7 @@ export default {
   methods: {
     getItemText: (val) => `${val.lastName} ${val.firstName}`,
 
-    closeDialog: () => bus.$emit('close-dialog'),
+    closeDialog: () => this.$emit('close-dialog'),
 
     saveStudentInSection() {
       if (this.$refs.form.validate()) {
@@ -121,7 +120,7 @@ export default {
           .then((response) => {
             api.get(`sections/${response.data.section}/`, {
               params: { expand: 'students,students.student' },
-            }).then((rResponse) => bus.$emit('section-edit', rResponse.data));
+            }).then((rResponse) => this.$emit('section-edit', rResponse.data));
           });
       }
     },

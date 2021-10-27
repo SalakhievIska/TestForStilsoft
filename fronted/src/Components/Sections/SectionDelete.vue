@@ -24,7 +24,6 @@
 
 <script>
 import api from '/src/apis/api';
-import bus from '/src/utils/bus';
 
 export default {
   name: 'SectionDelete',
@@ -32,11 +31,11 @@ export default {
   props: ['sectionId'],
 
   methods: {
-    closeDialog: () => bus.$emit('close-dialog'),
+    closeDialog: () => this.$emit('close-dialog'),
 
     submitDelete() {
       api.delete(`sections/${this.sectionId}/`)
-        .then(() => bus.$emit('section-delete', this.sectionId));
+        .then(() => this.$emit('section-delete', this.sectionId));
     },
   },
 };

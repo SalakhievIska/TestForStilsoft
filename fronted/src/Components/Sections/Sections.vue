@@ -100,32 +100,44 @@
     <v-dialog
         v-model="sectionAddEditDialog"
         max-width="600">
-      <SectionAddEdit :section-id="sectionIdForEdit"/>
+      <SectionAddEdit
+          :section-id="sectionIdForEdit"
+          v-on:section-add="sectionAdd($event)"
+          v-on:section-edit="sectionEdit($event)"
+          v-on:close-dialog="closeDialog"/>
     </v-dialog>
 
     <v-dialog
         v-model="sectionDeleteDialog"
         max-width="400">
-      <SectionDelete :section-id="sectionIdForDelete"/>
+      <SectionDelete
+          :section-id="sectionIdForDelete"
+          v-on:section-delete="sectionDelete($event)"
+          v-on:close-dialog="closeDialog"/>
     </v-dialog>
 
     <v-dialog
         v-model="studentInSectionAddDialog"
         max-width="500">
-      <StudentInSectionAdd :section-id="sectionIdForStudentInSectionAdd"/>
+      <StudentInSectionAdd
+          :section-id="sectionIdForStudentInSectionAdd"
+          v-on:section-edit="sectionEdit($event)"
+          v-on:close-dialog="closeDialog"/>
     </v-dialog>
 
     <v-dialog
         v-model="studentInSectionDeleteDialog"
         max-width="450">
-      <StudentInSectionDelete :student-in-section-id="studentInSectionIdForDelete"/>
+      <StudentInSectionDelete
+          :student-in-section-id="studentInSectionIdForDelete"
+          v-on:section-edit="sectionEdit($event)"
+          v-on:close-dialog="closeDialog"/>
     </v-dialog>
   </div>
 </template>
 
 <script>
 import api from '/src/apis/api';
-import bus from '/src/utils/bus';
 import moment from 'moment';
 import _ from 'lodash';
 import SectionAddEdit from '/src/Components/Sections/SectionAddEdit';
@@ -233,29 +245,29 @@ export default {
       this.$refs.filterForm.reset();
       this.getSections();
     },
+
+    sectionAdd(section) {
+      this.tableData = _.concat(this.tableData, this.formatSection(section));
+      this.afterEditSections();
+    },
+
+    sectionEdit(section) {
+      const sectionIndex = _.findIndex(this.tableData, (el) => el.id === section.id);
+      this.tableData.splice(sectionIndex, 1, this.formatSection(section));
+      this.afterEditSections();
+    },
+
+    sectionDelete(sectionId) {
+      this.tableData = _.remove(this.tableData, (el) => el.id !== sectionId);
+      this.afterEditSections();
+    },
+
+    closeDialog: () => this.afterEditSections(),
   },
 
   created() {
     this.filterForm = this.emptyFilterForm;
     this.getSections();
-
-    bus.$on('section-add', (newSection) => {
-      this.tableData = _.concat(this.tableData, this.formatSection(newSection));
-      this.afterEditSections();
-    });
-
-    bus.$on('section-edit', (section) => {
-      const sectionIndex = _.findIndex(this.tableData, (el) => el.id === section.id);
-      this.tableData.splice(sectionIndex, 1, this.formatSection(section));
-      this.afterEditSections();
-    });
-
-    bus.$on('section-delete', (sectionId) => {
-      this.tableData = _.remove(this.tableData, (el) => el.id !== sectionId);
-      this.afterEditSections();
-    });
-
-    bus.$on('close-dialog', () => this.afterEditSections());
   },
 };
 

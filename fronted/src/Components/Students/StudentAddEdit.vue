@@ -130,7 +130,6 @@
 <script>
 import api from '/src/apis/api';
 import sex from '/src/apis/enums';
-import bus from '/src/utils/bus';
 import { requiredField, maxLengthField, urlField } from '/src/utils/validators';
 import moment from 'moment';
 
@@ -187,7 +186,7 @@ export default {
   },
 
   methods: {
-    closeDialog: () => bus.$emit('close-dialog'),
+    closeDialog: () => this.$emit('close-dialog'),
 
     saveStudent() {
       if (this.$refs.form.validate()) {
@@ -203,10 +202,10 @@ export default {
         };
         if (this.studentId === 0) {
           api.post('students/', student)
-            .then((response) => bus.$emit('student-add', response.data));
+            .then((response) => this.$emit('student-add', response.data));
         } else {
           api.patch(`students/${this.studentId}/`, student)
-            .then((response) => bus.$emit('student-edit', response.data));
+            .then((response) => this.$emit('student-edit', response.data));
         }
       }
     },
