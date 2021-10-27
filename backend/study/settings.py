@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,7 +134,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # DRF
+
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'study.pagination.HeaderPagination',
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
@@ -149,6 +152,10 @@ REST_FRAMEWORK = {
 }
 
 # CORS
+
+CORS_EXPOSE_HEADERS = [
+    'x-paginator-count', 'x-paginator-perpage', 'x-paginator-numpages',
+]
 CORS_ALLOW_ALL_ORIGINS = False
 if DEBUG:
     CORS_ALLOWED_ORIGINS = (

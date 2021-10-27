@@ -49,13 +49,7 @@
             :items="tableData"
             class="px-10 my-5"
             locale="ru-ru"
-            :footer-props="{
-              showFirstLastPage: true,
-              itemsPerPageOptions: [1, 5, 10, 20, -1],
-              itemsPerPageText: 'Записей на странице:',
-              itemsPerPageAllText: 'Все',
-              pageText: '{0}-{1} из {2}',
-            }">
+            hide-default-footer>
 
           <template v-slot:item.actions="{ item }">
             <v-icon
@@ -94,6 +88,10 @@
             Список секицй пуст!
           </template>
         </v-data-table>
+
+        <Paginator
+            v-on:update-pagination="updatePagination($event)"
+            :num-pages="numPages"/>
       </v-col>
     </v-row>
 
@@ -144,12 +142,14 @@ import SectionAddEdit from '/src/Components/Sections/SectionAddEdit';
 import SectionDelete from '/src/Components/Sections/SectionDelete';
 import StudentInSectionAdd from '/src/Components/Sections/StudentInSectionAdd';
 import StudentInSectionDelete from '/src/Components/Sections/StudentInSectionDelete';
+import Paginator from '/src/Components/Utils/Paginator';
+import withPagination from '/src/Components/Utils/paginator.js';
 
 export default {
   name: 'Sections',
 
   components: {
-    SectionAddEdit, SectionDelete, StudentInSectionAdd, StudentInSectionDelete,
+    SectionAddEdit, SectionDelete, StudentInSectionAdd, StudentInSectionDelete, Paginator,
   },
 
   data: () => ({
@@ -161,6 +161,10 @@ export default {
       { text: 'Действия', value: 'actions', align: 'end' },
     ],
     tableData: [],
+    pageSize: 10,
+    page: 1,
+    numPages: 1,
+
     filterForm: {},
 
     sectionAddEditDialog: false,
@@ -218,9 +222,15 @@ export default {
     }),
 
     getSections() {
-      api.get('sections/', {
-        params: { expand: 'students,students.student', ...this.filterForm },
-      }).then((response) => {
+      withPagination(api.get('sections/', {
+        params: {
+          expand: 'students,students.student',
+          ...this.filterForm,
+          pageSize: this.pageSize,
+          page: this.page,
+        },
+      })).then((response) => {
+        this.numPages = response.paginator.numPages;
         this.tableData = _.map(response.data, (item) => this.formatSection(item));
       });
     },
@@ -243,6 +253,12 @@ export default {
 
     resetFilterForm() {
       this.$refs.filterForm.reset();
+      this.getSections();
+    },
+
+    updatePagination(data) {
+      this.page = data.page;
+      this.pageSize = data.pageSize;
       this.getSections();
     },
 
