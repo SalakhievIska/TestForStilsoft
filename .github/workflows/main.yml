@@ -1,0 +1,51 @@
+---
+
+name: Flake8
+
+on:
+  push:
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  Run:
+    name: "Проверяем и тестируем Django проект"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: Обновления 🛎️
+        uses: "actions/checkout@v2"
+
+      - name: Установка Python 3.8 🐍
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.8"
+
+      - name: Установка зависимостей 🔧
+        run: |
+          python -VV
+          python -m site
+          python -m pip install flake8
+
+      - name: Запускаем flake8 ▶️
+        run: "flake8
+
+  Run:
+    name: "Проверяем и тестируем Vuejs проект"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: Обновления 🛎️
+        uses: "actions/checkout@v2"
+
+      - name: Установка Node JS
+        uses: "actions/setup-node@v2"
+        with:
+          node-version: '14.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Установка зависимостей 🔧
+        run: npm install
+
+      - name: Запускаем eslint ▶️
+        run: npm run lint
