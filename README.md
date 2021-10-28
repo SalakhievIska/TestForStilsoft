@@ -4,6 +4,11 @@
 
 <h1 align="center">TestForStilsoft</h1>
 
+<p align="center">
+  [![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)]
+  [![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)]
+</p>
+
 ## Версия 0.1.1
 + Добавлена валиадция на бекенде
 + Удален bus из фронтед
