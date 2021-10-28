@@ -10,6 +10,14 @@
         class="px-5">
 
       <v-row>
+        <v-col cols="12">
+          <div v-for="error in nonFieldErrors" :key="error" class="red--text">
+            {{ error }}
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row>
         <v-col cols="12" md="6">
           <v-text-field
               v-model="form.firstName"
@@ -146,6 +154,7 @@ export default {
     rules: {},
     sex,
     currentDateFormat: 'DD.MM.YYYY',
+    nonFieldErrors: [],
   }),
 
   computed: {
@@ -158,12 +167,13 @@ export default {
       isReadyToJoinToSection: true,
       isCitizenOfRf: true,
       profilePhotoUrl: '',
+      nonFieldErrors: [],
     }),
 
     formRules: () => ({
       firstName: [
         (v) => requiredField(v),
-        (v) => maxLengthField(v, 128, 'Имя'),
+        (v) => maxLengthField(v, 130, 'Имя'),
       ],
       lastName: [
         (v) => requiredField(v),
@@ -198,17 +208,21 @@ export default {
           middleName: this.form.middleName || '',
           sex: this.form.sex,
           birthday: moment(this.form.birthday, this.currentDateFormat).format('YYYY-MM-DD'),
-          isReadyToJoinToSection: this.form.isReadyToJoinToSection,
-          isCitizenOfRf: this.form.isCitizenOfRf,
+          isReadyToJoinToSection: !!this.form.isReadyToJoinToSection,
+          isCitizenOfRf: !!this.form.isCitizenOfRf,
           profilePhotoUrl: this.form.profilePhotoUrl || '',
         };
-        if (this.studentId === 0) {
-          api.post('students/', student)
-            .then((response) => this.$emit('student-add', response.data));
-        } else {
-          api.patch(`students/${this.studentId}/`, student)
-            .then((response) => this.$emit('student-edit', response.data));
-        }
+        const action = this.studentId === 0
+          ? api.post('students/', student) : api.patch(`students/${this.studentId}/`, student);
+        const emitName = this.studentId === 0 ? 'student-add' : 'student-edit';
+
+        action.then((response) => this.$emit(emitName, response.data))
+          .catch((error) => {
+            const errorData = error.response.data;
+            if (errorData) {
+              if (errorData.nonFieldErrors) this.nonFieldErrors = errorData.nonFieldErrors;
+            }
+          });
       }
     },
 
@@ -218,6 +232,7 @@ export default {
     },
 
     setFormData() {
+      this.nonFieldErrors = [];
       if (this.studentId !== 0) {
         api.get(`students/${this.studentId}/`).then((response) => {
           this.form = {
@@ -234,7 +249,7 @@ export default {
         });
       } else {
         this.$refs.form.resetValidation();
-        this.form = this.emptyForm;
+        this.$refs.form.reset();
       }
     },
   },

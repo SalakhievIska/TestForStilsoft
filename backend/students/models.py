@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from dateutil.relativedelta import relativedelta
 from datetime import date
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 
 class Student(models.Model):
@@ -14,10 +15,17 @@ class Student(models.Model):
         MALE = 'ML', _('Мужчина')
         FEMALE = 'FM', _('Женщина')
 
-    first_name = models.CharField(max_length=128, verbose_name='Имя')
-    last_name = models.CharField(max_length=128, verbose_name='Фамилия')
+    first_name = models.CharField(
+        max_length=128, verbose_name='Имя',
+        validators=[MaxLengthValidator(128), MinLengthValidator(0)],
+    )
+    last_name = models.CharField(
+        max_length=128, verbose_name='Фамилия',
+        validators=[MaxLengthValidator(128), MinLengthValidator(0)],
+    )
     middle_name = models.CharField(
         max_length=128, verbose_name='Отчество', blank=True, null=True,
+        validators=[MaxLengthValidator(128), MinLengthValidator(0)],
     )
 
     birthday = models.DateField(verbose_name='Дата рождения')

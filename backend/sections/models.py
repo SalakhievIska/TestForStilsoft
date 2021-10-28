@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 
 class Section(models.Model):
@@ -6,7 +7,10 @@ class Section(models.Model):
     Модель секции
     """
 
-    name = models.CharField(max_length=256, verbose_name='Название')
+    name = models.CharField(
+        max_length=256, verbose_name='Название',
+        validators=[MaxLengthValidator(256), MinLengthValidator(0)],
+    )
 
     @property
     def student_count(self) -> int:

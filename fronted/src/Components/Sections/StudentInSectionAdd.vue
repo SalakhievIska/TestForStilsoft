@@ -11,6 +11,14 @@
 
       <v-row>
         <v-col cols="12">
+          <div v-for="error in nonFieldErrors" :key="error" class="red--text">
+            {{ error }}
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12">
           <v-select
               v-model="form.student"
               :items="students"
@@ -93,6 +101,7 @@ export default {
     currentDateFormat: 'DD.MM.YYYY',
     students: [],
     section: {},
+    nonFieldErrors: [],
   }),
 
   computed: {
@@ -123,6 +132,11 @@ export default {
             api.get(`sections/${response.data.section}/`, {
               params: { expand: 'students,students.student' },
             }).then((rResponse) => this.$emit('section-edit', rResponse.data));
+          }).catch((error) => {
+            const errorData = error.response.data;
+            if (errorData) {
+              if (errorData.nonFieldErrors) this.nonFieldErrors = errorData.nonFieldErrors;
+            }
           });
       }
     },
@@ -133,6 +147,7 @@ export default {
     },
 
     setFormData() {
+      this.nonFieldErrors = [];
       if (this.sectionId !== 0) {
         api.get(`sections/${this.sectionId}/`, {
           params: { expand: 'students,students.student' },
@@ -146,7 +161,7 @@ export default {
         });
       } else {
         this.$refs.form.resetValidation();
-        this.form = this.emptyForm;
+        this.$refs.form.reset();
       }
     },
   },

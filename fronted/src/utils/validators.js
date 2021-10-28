@@ -7,14 +7,14 @@ const checkValueMaxLength = (value, _max) => {
 
 const maxLengthField = (v, _max, label) => checkValueMaxLength(v, _max) || `${label} не длинее ${_max} символов`;
 
+const expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 const checkUrl = (url) => {
   if (url) {
-    try {
-      new URL(url); // eslint-disable-line no-new
-      return true;
-    } catch (_error) {
-      return false;
-    }
+    console.log(url.split(' ').length);
+    if (url.split(' ').length === 1) {
+      const urlRegex = new RegExp(expression);
+      return urlRegex.test(url);
+    } return false;
   } return true;
 };
 

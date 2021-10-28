@@ -4,7 +4,7 @@
       <v-select
           :items="[1, 5, 10, 20]"
           v-model="pageSize"
-          suffix="Показывать по:"
+          prefix="Показывать по:"
           outlined
           dense
           item-color="purple lighten-2">

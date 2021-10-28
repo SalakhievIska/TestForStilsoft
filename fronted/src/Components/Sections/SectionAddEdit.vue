@@ -61,7 +61,7 @@ export default {
     formRules: () => ({
       name: [
         (v) => requiredField(v),
-        (v) => maxLengthField(v, 128, 'Название'),
+        (v) => maxLengthField(v, 256, 'Название'),
       ],
     }),
   },
@@ -75,13 +75,11 @@ export default {
       if (this.$refs.form.validate()) {
         const section = { name: this.form.name };
         const params = { params: { expand: 'students,students.student' } };
-        if (this.sectionId === 0) {
-          api.post('sections/', section, params)
-            .then((response) => this.$emit('section-add', response.data));
-        } else {
-          api.patch(`sections/${this.sectionId}/`, section, params)
-            .then((response) => this.$emit('section-edit', response.data));
-        }
+        const action = this.sectionId === 0
+          ? api.post('sections/', section, params)
+          : api.patch(`sections/${this.sectionId}/`, section, params);
+        const emitName = this.sectionId === 0 ? 'section-add' : 'section-edit';
+        action.then((response) => this.$emit(emitName, response.data));
       }
     },
 
@@ -92,7 +90,7 @@ export default {
         });
       } else {
         this.$refs.form.resetValidation();
-        this.form = this.emptyForm;
+        this.$refs.form.reset();
       }
     },
   },
