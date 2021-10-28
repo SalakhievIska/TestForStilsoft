@@ -4,7 +4,10 @@
       <v-select
           :items="[1, 5, 10, 20]"
           v-model="pageSize"
-          suffix="Показывать по:">
+          suffix="Показывать по:"
+          outlined
+          dense
+          item-color="purple lighten-2">
       </v-select>
     </v-col>
 
@@ -14,7 +17,9 @@
           circle
           :length="numPages"
           :total-visible="5"
-          color="purple lighten-2">
+          color="purple lighten-2"
+          next-icon="fas fa-angle-right"
+          prev-icon="fas fa-angle-left">
       </v-pagination>
     </v-col>
   </v-row>

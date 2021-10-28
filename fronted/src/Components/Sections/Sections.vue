@@ -1,8 +1,14 @@
 <template>
   <div>
     <v-toolbar flat class="px-10">
-      <v-toolbar-title>Секции</v-toolbar-title>
+      <v-toolbar-title>
+        <div class="text-h5 font-weight-bold">
+          Секции
+        </div>
+      </v-toolbar-title>
+
       <v-spacer></v-spacer>
+
       <v-btn
           rounded
           depressed
@@ -142,7 +148,7 @@ import SectionAddEdit from '/src/Components/Sections/SectionAddEdit';
 import SectionDelete from '/src/Components/Sections/SectionDelete';
 import StudentInSectionAdd from '/src/Components/Sections/StudentInSectionAdd';
 import StudentInSectionDelete from '/src/Components/Sections/StudentInSectionDelete';
-import Paginator from '/src/Components/Utils/Paginator';
+import Paginator from '/src/Components/Utils/Paginator.vue';
 import withPagination from '/src/Components/Utils/paginator.js';
 
 export default {

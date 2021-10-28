@@ -1,8 +1,14 @@
 <template>
   <div>
     <v-toolbar flat class="px-10">
-      <v-toolbar-title>Студенты</v-toolbar-title>
+      <v-toolbar-title>
+        <div class="text-h5 font-weight-bold">
+          Студенты
+        </div>
+      </v-toolbar-title>
+
       <v-spacer></v-spacer>
+
       <v-btn
           rounded
           depressed
@@ -165,7 +171,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import StudentAddEdit from '/src/Components/Students/StudentAddEdit';
 import StudentDelete from '/src/Components/Students/StudentDelete';
-import Paginator from '/src/Components/Utils/Paginator';
+import Paginator from '/src/Components/Utils/Paginator.vue';
 import withPagination from '/src/Components/Utils/paginator.js';
 
 export default {
