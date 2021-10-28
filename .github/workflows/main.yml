@@ -1,6 +1,6 @@
 ---
 
-name: Flake8
+name: Lint check
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
     branches: ["dev"]
 
 jobs:
-  Run:
+ flake8:
     name: "Проверяем и тестируем Django проект"
     runs-on: "ubuntu-20.04"
 
@@ -28,9 +28,9 @@ jobs:
           python -m pip install flake8
 
       - name: Запускаем flake8 ▶️
-        run: "flake8
+        run: "flake8"
 
-  Run:
+ eslint:
     name: "Проверяем и тестируем Vuejs проект"
     runs-on: "ubuntu-20.04"
 
