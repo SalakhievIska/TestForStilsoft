@@ -35,7 +35,9 @@ export default {
   }),
 
   methods: {
-    closeDialog: () => this.$emit('close-dialog'),
+    closeDialog() {
+      this.$emit('close-dialog');
+    },
 
     submitDelete() {
       api.get(`students-in-sections/${this.studentInSectionId}/`).then((response) => {

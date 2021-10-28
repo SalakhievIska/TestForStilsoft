@@ -284,7 +284,9 @@ export default {
       this.afterEditSections();
     },
 
-    closeDialog: () => this.afterEditSections(),
+    closeDialog() {
+      this.afterEditSections();
+    },
   },
 
   created() {

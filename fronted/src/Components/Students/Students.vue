@@ -295,7 +295,9 @@ export default {
       this.afterEditStudents();
     },
 
-    closeDialog: () => this.afterEditStudents(),
+    closeDialog() {
+      this.afterEditStudents();
+    },
   },
 
   created() {

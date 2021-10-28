@@ -31,7 +31,9 @@ export default {
   props: ['sectionId'],
 
   methods: {
-    closeDialog: () => this.$emit('close-dialog'),
+    closeDialog() {
+      this.$emit('close-dialog');
+    },
 
     submitDelete() {
       api.delete(`sections/${this.sectionId}/`)

@@ -107,7 +107,9 @@ export default {
   methods: {
     getItemText: (val) => `${val.lastName} ${val.firstName}`,
 
-    closeDialog: () => this.$emit('close-dialog'),
+    closeDialog() {
+      this.$emit('close-dialog');
+    },
 
     saveStudentInSection() {
       if (this.$refs.form.validate()) {

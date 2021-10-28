@@ -31,12 +31,14 @@ export default {
   props: ['studentId'],
 
   methods: {
+    closeDialog() {
+      this.$emit('close-dialog');
+    },
+
     submitDelete() {
       api.delete(`students/${this.studentId}/`)
         .then(() => this.$emit('student-delete', this.studentId));
     },
-
-    closeDialog: () => this.$emit('close-dialog'),
   },
 };
 </script>

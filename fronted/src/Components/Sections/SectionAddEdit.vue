@@ -67,7 +67,9 @@ export default {
   },
 
   methods: {
-    closeDialog: () => this.$emit('close-dialog'),
+    closeDialog() {
+      this.$emit('close-dialog');
+    },
 
     saveSection() {
       if (this.$refs.form.validate()) {
